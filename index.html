@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sail Away | Poems</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
+      color: #fff;
+    }
+
+    header {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      color: #00e6e6;
+    }
+
+    nav a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #ccc;
+      transition: color 0.3s ease;
+    }
+
+    nav a:hover {
+      color: #00e6e6;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 5rem 1rem;
+      background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80');
+      background-size: cover;
+      background-position: center;
+      color: white;
+    }
+
+    .hero h2 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .category-buttons {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .category-buttons button {
+      margin: 0.5rem;
+      padding: 0.6rem 1.5rem;
+      border: none;
+      border-radius: 30px;
+      background-color: #00e6e6;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .category-buttons button:hover {
+      background-color: #00bfbf;
+    }
+
+    .poem-section {
+      padding: 3rem 1rem;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .poem {
+      background: rgba(255, 255, 255, 0.07);
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+
+    .poem:hover {
+      transform: scale(1.02);
+    }
+
+    .poem h3 {
+      color: #00e6e6;
+      margin-bottom: 0.5rem;
+    }
+
+    .poem p {
+      margin: 0.8rem 0;
+      line-height: 1.5;
+    }
+
+    .read-more {
+      color: #ffd700;
+      cursor: pointer;
+      text-decoration: underline;
+      display: inline-block;
+      margin-top: 0.5rem;
+    }
+
+    .full-text {
+      display: none;
+      margin-top: 1rem;
+      color: #eee;
+    }
+
+    .hidden { display: none; }
+
+    /* Smooth reveal */
+    .visible {
+      display: block;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive tweaks for smaller screens */
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1rem;
+      }
+      header h1 {
+        font-size: 1.4rem;
+        margin-bottom: 0.5rem;
+      }
+      nav a {
+        margin-left: 0;
+        margin-right: 15px;
+        font-size: 0.9rem;
+      }
+      .hero {
+        padding: 3rem 1rem;
+      }
+      .hero h2 {
+        font-size: 2rem;
+      }
+      .category-buttons button {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+      .poem-section {
+        padding: 2rem 1rem;
+        max-width: 100%;
+      }
+      .poem {
+        padding: 1rem;
+      }
+      .poem h3 {
+        font-size: 1.2rem;
+      }
+      .poem p {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Sail Away</h1>
+    <nav>
+      <a href="music.html">🎵 Listen to Music</a>
+       <a href="Gallery.html">Gallery</a>
+      <a href="#poems">Poems</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h2>Welcome to My Creative Space</h2>
+    <p>Poetry • Music • Visual Vibes</p>
+  </div>
+
+  <section id="poems" class="poem-section">
+    <h2 style="text-align:center;">Poetry Library</h2>
+
+    <div class="category-buttons">
+      <button onclick="filterPoems('all')">All</button>
+      <button onclick="filterPoems('love')">Love</button>
+      <button onclick="filterPoems('sadness')">Sadness</button>
+      <button onclick="filterPoems('inner')">Inner Battles</button>
+    </div>
+
+    <!-- Poems -->
+    <div class="poem love">
+      <h3>Feelings Untold</h3>
+      <p>At the very start, we were on the same page...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>At the very start,<br>We were on the same page,<br>I could read your mind,<br>And you heard what's on my heart...</p>
+        <p>But as the road went long,<br>Something begun to change,<br>I lost sight of the gem,<br>That I had kept hidden from you...</p>
+        <p>Hoping one day I'll show you,<br>In exchange for happiness,<br>And a heart of resonance,<br>Too bad that day wasn't meant to be...</p>
+        <p>Looking at your tired eyes,<br>Our road seemed uninteresting as it went on,<br>Losing track of what to say,<br>Became a habit I can't explain...</p>
+        <p>Until you made a hurting choice,<br>To change lanes,<br>Leaving me here,<br>Talking to the whispering wind.</p>
+      </div>
+    </div>
+
+    <div class="poem love">
+      <h3>Closed Chapter</h3>
+      <p>I guess this is how it is for us...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>I guess this is how it is for us,<br>Two distant hearts,<br>Sharing the same pulse,<br>Sitting on untold thoughts...</p>
+        <p>Afraid of the pain we'd bring,<br>Upon our already burdened souls,<br>Minds torn apart,<br>By the truth we can't escape...</p>
+        <p>We smile to hide the pain,<br>Screaming out I need you,<br>In the depth of loneliness,<br>Wondering what lives we both live,<br>Without each other around.</p>
+      </div>
+    </div>
+
+    <div class="poem love">
+      <h3>Monologues-Part One</h3>
+      <p>We locked eyes...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>We locked eyes,<br>Setting all lies aside<br>I heard your truth<br>Without a single word.</p>
+        <p>And you felt my pain,<br>From miles away.<br>But our end rushed in,<br>Leaving us behind,<br>Alone with emotions,<br></p>
+        <p>Stranded in sorrow,<br>Longing to hold hands again,<br>But that moment has gone,<br>So we wear our masks,<br>Drying tears when no one's watching.</p>
+        </div>
+    </div>
+
+       <div class="poem love">
+      <h3>Just Friends</h3>
+      <p>They told each other..</p> 
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>They told each other,<br>"Till the end of the line"<br>Only death, they said,<br>Could ever pull them apart</p>
+        <p>Deep down,the truth was known,<br>But the feelings stayed unspoken<br>As time passed,<br>The cracks began to show</p>
+        <p>Both longed to be free,<br>Yet the bond was too strong to sever.<br>A love so rare,<br>Their hearts burned quietly in it's flame.</p>
+        <p>But as the saying goes:<br>Never awaken love before it's time.<br>This one never saw the light of day,<br>Yet it lived,<br>Somewhere in the realm of the unseen.</p>
+     </div>
+    </div>
+
+
+    <div class="poem love">
+      <h3>Moved on</h3>
+      <p>I heard your voice...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>I heard your voice,<br>But it held a tone,<br>So different,<br>From the one I once knew.</p>
+        <p>I smiled,<br> Guided by what my eyes trusted</p>
+        <p>But as you spoke,<br>I saw it clearly,<br>The person I loved,<br>Lived only in memory<br>Lost somewhere in the past.</p>
+        <p>A tear traced my cheek,<br>As reality whispered,<br><i>"It's time to let go"</i></p>
+        <p>And as your hands,<br>Slipped away from mine,<br>I watched you leave,<br>Like we were never here.</p>
+      </div>
+    </div>
+
+    <div class="poem love">
+      <h3>My Dear</h3>
+      <p>I've watched you...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>I've watched you for a while,<br>Seen your tears fall in the dark,<br>Holding pain in quiet hands,<br>While telling the world you're fine.</p>
+        <p>You are a treasure,<br>Too rare to measure<br>Refined beneath the weight of pressure,<br>With a heart still soft..still kind</p>
+        <p>I wonder how many scars you've worn,<br>Just to paint that smile,<br>How many lies you had to whisper,<br>Just to feel peace for a while.</p>
+        <p>I almost fell in love with you<br>But I came to understand,<br>We weren't meant to stay,<br>Only to meet..<br>And help each other find the way.</p>
+      </div>
+  </div>
+
+    <div class="poem sadness">
+      <h3>No More Tears Left to Cry</h3>
+      <p>I sat by the riverside...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>I sat by the riverside,<br>Watching stars ripple,<br>In the still water's glow,<br>As the moon smiled quetly above</p>
+        <p>I sighed....<br>A soft breath of release,<br>Closing my eyes,<br>Just for a moment,</p>
+        <p>To imagine what could be,<br>What i might lose,<br>And the knives I've held<br>Pulled from the backs,<br>Of those who once offered love.</p>
+        <p>In that silence,<br>My heart sank,<br>Realizing how distant I've drifted,<br>From my Creator,<br>Yet sensing His nearness.</p>
+        <p>It's a war,<br>I seem destined to fight,<br>Grace beside guilt,<br>Faith beside fear.</p>
+        <p>I opened my eyes,<br>One tear escaped,<br>Not from pain,<br>But from knowing,</p>
+        <p>This world is vanity,<br>And still,<br>I pray I keep,<br>My sanity</p>
+      </div>
+    </div>
+
+    <div class="poem sadness">
+      <h3>Childhood Memories</h3>
+      <p>Opened the gallery...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>Opened the gallery,<br>And time pulled me back.<br>Innocent faces stared back at me,<br>Each moment replaying like a silent track.</p>
+        <p>Back when it was never about money,<br>When hearts were wide open,<br>When happiness was the air we breathed,<br>And time paused just to let us feel,</p>
+        <p>For a moment,it all felt real,<br>Tiny voices echoing in my mind,<br>Laughter dancing in the distance,<br>As I flipped through each frame.</p>
+        <p>..Then the smiles began to fade.<br>Some photos torn,<br>Some people gone,<br>And others simply drifted away.</p>
+      </div>
+  </div>
+
+        <div class="poem sadness">
+      <h3>Only Time Will Tell</h3>
+      <p>I guess my hopes were high...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>I guess my hopes were high,<br>I saw the future clearly,<br>Like a bright, sunny day<br>Unaware of the truths life kept hidden.</p>
+        <p>I chased  golden moments with open hands,<br>Mistaking sparks for steady flames,<br>Letting strangers close to my heart,<br>While calling silence a sign of care.</p>
+        <p>I handed over my trust<br>To those who gave me none,<br>Shared my side of the story<br>With those who'd twist it.</p>
+        <p>And now I'm growing old<br>And the story keeps on changing<br>Every twist got me thinking<br>Whether my guardian angel saw it coming </p>
+        </div>
+      </div>
+    
+     
+    <div class="poem sadness">
+      <h3>Foreshadowing</h3>
+      <p>Burdened by her own existence...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>Burdened by her own existence,<br>She bore a weight too heavy to name<br>Behind beauty she hid,<br>Laughter and smiles became her shield.</p>
+        <p>She built walls with grace and charm,<br>Convincing others her life was golden.<br>They admired from afar,<br>Never seeing the cracks</p>
+        <p>The cycle repeated,<br>Pulling others into the illusion.</p>
+        <p>Until there was nothing left to mask,<br>Until her heart overflowed with silent cries<br>And they asked, What happened to her?<br>She was always the happy one.</p>
+          </div>
+    </div>
+
+
+    <div class="poem inner">
+      <h3>Let Me Out</h3>
+      <p>Why are you doing this to me...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>Why are you doing this to me,<br>Have I not given my all,<br>Have I not evolved enough for you,<br>Have I not built a personality,<br>Just to protect your ego...</p>
+        <p>How can I control what I am,<br>This force within me,<br>To make decisions I'm aware of,<br>Yet I still let it roll the dice,<br>And choose the action...</p>
+        <p>Please let me go,<br>I don't want to be here,<br>I don't want to hear their voices,<br>People are always talking,<br>No..I'm not insane.</p>
+      </div>
+    </div>
+
+    <div class="poem inner">
+      <h3>If I were you</h3>
+      <p>Maybe I'd smile alittle more...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+      <p>Maybe I'd smile a little more<br>Maybe I'd love without fear<br>Maybe I'd face the world<br>Without caring what it really is.</p>
+      <p>But then I'm reminded,<br>It's just a soft illusion,<br>A thought crafted escape<br>From the weight I hold inside</p>
+      <p>I know the truth too well<br>Yet still sip from cups of delusion<br>To drown the ocean of sins<br>That hide behind this mask I wear</p>
+      </div>
+    </div>
+
+     <div class="poem inner">
+      <h3>Look Within</h3>
+      <p>Set aside the noise...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>Set aside the noise,<br>Sit quietly with silence,<br>Reflect on life's journey,<br>And name what's been holding you back</p>
+        <p>Acknowledge your sins,<br>But do not play the judge.<br>For as you pass judgement,<br>So shall it return to you.</p>
+        <p>Do not run from God<br>Chasing fleeting vanities,<br>Don't let the world's bright lights,<br>Blind you to what truly lasts.</p>
+        <p>I hope you learn to forgive yourself,<br>Each time you fall behind,<br>And I hope you always remember,<br>God is waiting,<br>Arms open wide</p>
+           </div>
+     </div>
+
+
+    <div class="poem inner">
+      <h3>The Eyes Never Lie</h3>
+      <p>It was always there...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>It was always there,<br>Written in silence<br>Etched in glances<br>I refused to understand.</p>
+        <p>I wore the blindfold willingly,<br>Calling it trust,<br>Calling it hope,<br>While truth stared back at me,<br>Unblinking.</p>
+        <p>Words reached my ears<br>But never touched my soul.<br>I filtered out the warnings,<br>Held onto illusions,<br>Like they were lifelines.</p>
+        <p>Now the veil is gone,<br>Not torn by me,<br>But by time<br>Or a stranger's whisper.</p>
+        <p>And though I ask, “Is it too late?”,<br>I know time bends,<br>And healing doesn't check the clock.</p>
+        <p>Maybe I'll find the moments I lost,<br>Catch the light I once ignored,<br>And see the world again,<br>Not as I wished it to be,<br>But as it truly is.</p>
+      </div>
+    </div>
+  
+
+    <div class="poem inner">
+      <h3>Short prayer</h3>
+      <p>Dear Lord,I pray my eyes open ...</p>
+      <span class="read-more" onclick="togglePoem(this)">Read More</span>
+      <div class="full-text">
+        <p>I pray my eyes may open-,<br>To see the path ahead with clarity,<br>To stop appearing,<br>Like I'm seeking attention</p>
+        <p>From the crowd with stones in hand,<br>Smiling,yet unaware,<br>Of what hides in their hearts</p>
+        <p>I pray my heart releases<br>The weight I cannot show,<br>The burdens behind closed doors.</p>
+        <p>I pray I fulfill my purpose,<br>On this earth You formed,<br>In the little time I've been given<br>I pray I'm not<br>A wasted potential.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <script>
+    function togglePoem(element) {
+      const text = element.nextElementSibling;
+      text.classList.toggle('visible');
+    }
+
+    function filterPoems(category) {
+      const poems = document.querySelectorAll('.poem');
+      poems.forEach(poem => {
+        if (category === 'all' || poem.classList.contains(category)) {
+          poem.style.display = 'block';
+        } else {
+          poem.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

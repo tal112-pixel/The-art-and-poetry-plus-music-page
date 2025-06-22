@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Art Gallery | Sail Away</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f5f5f5;
+      color: #000;
+      margin: 0;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.night {
+      background-color: #121212;
+      color: #f0f0f0;
+    }
+
+    #modeButton {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      padding: 10px 18px;
+      font-size: 14px;
+      background-color: #ffffff;
+      color: #333;
+      border: none;
+      border-radius: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      cursor: pointer;
+      z-index: 1000;
+      transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    body.night #modeButton {
+      background-color: #333;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(255,255,255,0.1);
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      padding: 20px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .art-item img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: transform 0.3s ease;
+    }
+
+    .art-item img:hover {
+      transform: scale(1.05);
+    }
+
+    a {
+      display: inline-block;
+      margin: 30px 0;
+      padding: 10px 20px;
+      text-decoration: none;
+      background-color: #333;
+      color: #fff;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    a:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <button id="modeButton">Switch to Dark Mode</button>
+
+  <header>
+    <h1>Art Gallery</h1>
+    <p>Set your eyes on the wonders of gifted hands...</p>
+  </header>
+
+  <div class="gallery">
+    <div class="art-item"><img src="Images/IMG_20240717_193544.jpg" alt="Art 1"/></div>
+    <div class="art-item"><img src="Images/IMG_20240727_141837.jpg" alt="Art 2"/></div>
+    <div class="art-item"><img src="Images/IMG_20240807_164711.jpg" alt="Art 3"/></div>
+    <div class="art-item"><img src="Images/IMG_20241005_101519~2_1.jpg" alt="Art 4"/></div>
+    <div class="art-item"><img src="Images/IMG_20241021_114822.jpg" alt="Art 5"/></div>
+    <div class="art-item"><img src="Images/IMG_20241023_142423.jpg" alt="Art 6"/></div>
+    <div class="art-item"><img src="Images/IMG_20241030_155620.jpg" alt="Art 7"/></div>
+    <div class="art-item"><img src="Images/IMG_20241031_131500.jpg" alt="Art 8"/></div>
+    <div class="art-item"><img src="Images/IMG_20241105_132948.jpg" alt="Art 9"/></div>
+    <div class="art-item"><img src="Images/IMG_20241113_135505.jpg" alt="Art 10"/></div>
+    <div class="art-item"><img src="Images/IMG_20241121_085956.jpg" alt="Art 11"/></div>
+    <div class="art-item"><img src="Images/IMG_20241130_205217.jpg" alt="Art 12"/></div>
+    <div class="art-item"><img src="Images/IMG_20250208_170801.jpg" alt="Art 13"/></div>
+    <div class="art-item"><img src="Images/IMG_20250305_143647.jpg" alt="Art 14"/></div>
+    <div class="art-item"><img src="Images/IMG_20250305_143838.jpg" alt="Art 15"/></div>
+    <div class="art-item"><img src="Images/IMG_20250417_154918.jpg" alt="Art 16"/></div>
+    <div class="art-item"><img src="Images/IMG-20241030-WA0037.jpg" alt="Art 17"/></div>
+    <div class="art-item"><img src="Images/IMG-20241030-WA0038.jpg" alt="Art 18"/></div>
+    <div class="art-item"><img src="Images/IMG-20241030-WA0039.jpg" alt="Art 19"/></div>
+    <div class="art-item"><img src="Images/pm_1717321216974_cmp.jpg" alt="Art 20"/></div>
+    <div class="art-item"><img src="Images/pm_1717321241326_cmp~2.jpg" alt="Art 21"/></div>
+    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 00.09.42_c7c71477.jpg" alt="Art 22"/></div>
+    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 00.10.33_945f3d4c.jpg" alt="Art 23"/></div>
+    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.22_9e909f9c.jpg" alt="Art 24"/></div>
+    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.23_58dbc78a.jpg" alt="Art 25"/></div>
+    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.26_41ec4c71.jpg" alt="Art 26"/></div>
+    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.27_210aa832.jpg" alt="Art 27"/></div>
+    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.28_7c3b4668.jpg" alt="Art 28"/></div>
+    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 22.34.39_c388e3fc.jpg" alt="Art 29"/></div>
+  </div>
+
+  <a href="index.html">Back To main</a>
+
+  <script>
+    const modeButton = document.getElementById("modeButton");
+    modeButton.addEventListener("click", () => {
+      document.body.classList.toggle("night");
+      modeButton.textContent = document.body.classList.contains("night")
+        ? "Switch to Light Mode"
+        : "Switch to Dark Mode";
+    });
+  </script>
+</body>
+</html>
