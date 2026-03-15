@@ -4,135 +4,487 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Art Gallery | Sail Away</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --ink: #e8e0d5;
+      --ink-dim: rgba(232,224,213,0.5);
+      --ink-faint: rgba(232,224,213,0.08);
+      --accent: #c9a96e;
+      --accent-glow: rgba(201,169,110,0.15);
+      --bg-deep: #0a0806;
+      --bg-card: rgba(255,255,255,0.04);
+      --border: rgba(201,169,110,0.2);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
     body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background-color: #f5f5f5;
-      color: #000;
-      margin: 0;
-      transition: background-color 0.3s ease, color 0.3s ease;
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg-deep);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    body.night {
-      background-color: #121212;
-      color: #f0f0f0;
-    }
-
-    #modeButton {
+    /* grain */
+    body::after {
+      content: '';
       position: fixed;
-      top: 15px;
-      right: 15px;
-      padding: 10px 18px;
-      font-size: 14px;
-      background-color: #ffffff;
-      color: #333;
-      border: none;
-      border-radius: 30px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      cursor: pointer;
-      z-index: 1000;
-      transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.6;
     }
 
-    body.night #modeButton {
-      background-color: #333;
-      color: #fff;
-      box-shadow: 0 4px 12px rgba(255,255,255,0.1);
-    }
-
+    /* ── HEADER ── */
     header {
-      background-color: #333;
-      color: white;
-      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+      background: rgba(10,8,6,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem;
+      font-weight: 300;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-decoration: none;
+    }
+
+    nav { display: flex; gap: 2rem; align-items: center; }
+
+    nav a {
+      text-decoration: none;
+      color: var(--ink-dim);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.3s;
+      position: relative;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+    nav a:hover { color: var(--accent); }
+    nav a:hover::after { width: 100%; }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px; height: 1.5px;
+      background: var(--ink);
+      transition: all 0.3s;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 7rem 2rem 5rem;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.2s forwards;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      color: var(--ink);
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.4s forwards;
+    }
+
+    .hero h1 em { font-style: italic; color: var(--accent); }
+
+    .hero-sub {
+      font-size: 0.88rem;
+      letter-spacing: 0.15em;
+      color: var(--ink-dim);
+      opacity: 0;
+      animation: fadeUp 1s ease 0.6s forwards;
+    }
+
+    .hero-divider {
+      width: 50px; height: 1px;
+      background: var(--accent);
+      margin: 1.8rem auto;
+      opacity: 0;
+      animation: expand 1s ease 0.8s forwards;
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: rgba(0,0,0,0.92);
+      backdrop-filter: blur(12px);
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .lightbox.open { display: flex; }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 4px;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+      animation: fadeUp 0.3s ease;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem; right: 2rem;
+      font-size: 1.8rem;
+      color: var(--ink-dim);
+      cursor: pointer;
+      transition: color 0.2s;
+      background: none;
+      border: none;
+      line-height: 1;
+    }
+    .lightbox-close:hover { color: var(--accent); }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--ink);
+      font-size: 1.4rem;
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+      backdrop-filter: blur(8px);
+      background: rgba(10,8,6,0.5);
+    }
+    .lightbox-nav:hover { border-color: var(--accent); color: var(--accent); }
+    .lightbox-prev { left: 1.5rem; }
+    .lightbox-next { right: 1.5rem; }
+
+    .lightbox-counter {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      color: var(--ink-dim);
+    }
+
+    /* ── GALLERY GRID ── */
+    .gallery-section {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.5rem 6rem;
     }
 
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 20px;
-      max-width: 1000px;
-      margin: auto;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .art-item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      background: var(--bg-card);
+      aspect-ratio: 1 / 1;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .art-item.revealed {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .art-item img {
       width: 100%;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      transition: transform 0.3s ease;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.4,0,0.2,1), filter 0.4s;
+      filter: brightness(0.9) saturate(0.85);
     }
 
-    .art-item img:hover {
-      transform: scale(1.05);
+    .art-item:hover img {
+      transform: scale(1.07);
+      filter: brightness(1) saturate(1);
     }
 
-    a {
-      display: inline-block;
-      margin: 30px 0;
-      padding: 10px 20px;
+    .art-item-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,8,6,0.6) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+    }
+
+    .art-item:hover .art-item-overlay { opacity: 1; }
+
+    .art-item-overlay span {
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* ── BACK LINK ── */
+    .back-link {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      padding-bottom: 5rem;
+    }
+
+    .back-link a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
       text-decoration: none;
-      background-color: #333;
-      color: #fff;
-      border-radius: 8px;
-      transition: background-color 0.3s;
+      color: var(--ink-dim);
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      padding: 0.7rem 1.8rem;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+    .back-link a:hover { color: var(--accent); border-color: var(--accent); }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--ink-dim);
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
     }
 
-    a:hover {
-      background-color: #555;
+    /* ── MOBILE ── */
+    @media (max-width: 700px) {
+      header { padding: 1rem 1.4rem; }
+      .nav-toggle { display: flex; }
+      nav {
+        position: fixed;
+        top: 0; right: -100%;
+        height: 100vh; width: 70vw; max-width: 280px;
+        background: rgba(10,8,6,0.97);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        justify-content: center;
+        gap: 2.5rem;
+        border-left: 1px solid var(--border);
+        transition: right 0.4s cubic-bezier(0.4,0,0.2,1);
+        z-index: 200;
+      }
+      nav.open { right: 0; }
+      nav a { font-size: 1rem; }
+      .gallery { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+      .lightbox-nav { display: none; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes expand {
+      from { opacity: 0; width: 0; }
+      to { opacity: 1; width: 50px; }
     }
   </style>
 </head>
 <body>
-  <button id="modeButton">Switch to Dark Mode</button>
 
   <header>
-    <h1>Art Gallery</h1>
-    <p>Set your eyes on the wonders of gifted hands...</p>
+    <a class="logo" href="index.html">Sail Away</a>
+    <div class="nav-toggle" id="navToggle">
+      <span></span><span></span><span></span>
+    </div>
+    <nav id="mainNav">
+      <a href="music.html">🎵 Music</a>
+      <a href="Gallery.html">Gallery</a>
+      <a href="index.html#poems">Poems</a>
+    </nav>
   </header>
 
-  <div class="gallery">
-    <div class="art-item"><img src="Images/IMG_20240717_193544.jpg" alt="Art 1"/></div>
-    <div class="art-item"><img src="Images/IMG_20240727_141837.jpg" alt="Art 2"/></div>
-    <div class="art-item"><img src="Images/IMG_20240807_164711.jpg" alt="Art 3"/></div>
-    <div class="art-item"><img src="Images/IMG_20241005_101519~2_1.jpg" alt="Art 4"/></div>
-    <div class="art-item"><img src="Images/IMG_20241021_114822.jpg" alt="Art 5"/></div>
-    <div class="art-item"><img src="Images/IMG_20241023_142423.jpg" alt="Art 6"/></div>
-    <div class="art-item"><img src="Images/IMG_20241030_155620.jpg" alt="Art 7"/></div>
-    <div class="art-item"><img src="Images/IMG_20241031_131500.jpg" alt="Art 8"/></div>
-    <div class="art-item"><img src="Images/IMG_20241105_132948.jpg" alt="Art 9"/></div>
-    <div class="art-item"><img src="Images/IMG_20241113_135505.jpg" alt="Art 10"/></div>
-    <div class="art-item"><img src="Images/IMG_20241121_085956.jpg" alt="Art 11"/></div>
-    <div class="art-item"><img src="Images/IMG_20241130_205217.jpg" alt="Art 12"/></div>
-    <div class="art-item"><img src="Images/IMG_20250208_170801.jpg" alt="Art 13"/></div>
-    <div class="art-item"><img src="Images/IMG_20250305_143647.jpg" alt="Art 14"/></div>
-    <div class="art-item"><img src="Images/IMG_20250305_143838.jpg" alt="Art 15"/></div>
-    <div class="art-item"><img src="Images/IMG_20250417_154918.jpg" alt="Art 16"/></div>
-    <div class="art-item"><img src="Images/IMG-20241030-WA0037.jpg" alt="Art 17"/></div>
-    <div class="art-item"><img src="Images/IMG-20241030-WA0038.jpg" alt="Art 18"/></div>
-    <div class="art-item"><img src="Images/IMG-20241030-WA0039.jpg" alt="Art 19"/></div>
-    <div class="art-item"><img src="Images/pm_1717321216974_cmp.jpg" alt="Art 20"/></div>
-    <div class="art-item"><img src="Images/pm_1717321241326_cmp~2.jpg" alt="Art 21"/></div>
-    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 00.09.42_c7c71477.jpg" alt="Art 22"/></div>
-    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 00.10.33_945f3d4c.jpg" alt="Art 23"/></div>
-    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.22_9e909f9c.jpg" alt="Art 24"/></div>
-    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.23_58dbc78a.jpg" alt="Art 25"/></div>
-    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.26_41ec4c71.jpg" alt="Art 26"/></div>
-    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.27_210aa832.jpg" alt="Art 27"/></div>
-    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.28_7c3b4668.jpg" alt="Art 28"/></div>
-    <div class="art-item"><img src="Images/WhatsApp Image 2025-06-21 at 22.34.39_c388e3fc.jpg" alt="Art 29"/></div>
+  <section class="hero">
+    <p class="hero-eyebrow">Visual Works</p>
+    <h1>Art <em>Gallery</em></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-sub">Set your eyes on the wonders of gifted hands</p>
+  </section>
+
+  <section class="gallery-section">
+    <div class="gallery" id="gallery">
+      <div class="art-item" onclick="openLightbox(0)"><img src="Images/IMG_20240717_193544.jpg" alt="Art 1"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(1)"><img src="Images/IMG_20240727_141837.jpg" alt="Art 2"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(2)"><img src="Images/IMG_20240807_164711.jpg" alt="Art 3"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(3)"><img src="Images/IMG_20241005_101519~2_1.jpg" alt="Art 4"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(4)"><img src="Images/IMG_20241021_114822.jpg" alt="Art 5"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(5)"><img src="Images/IMG_20241023_142423.jpg" alt="Art 6"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(6)"><img src="Images/IMG_20241030_155620.jpg" alt="Art 7"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(7)"><img src="Images/IMG_20241031_131500.jpg" alt="Art 8"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(8)"><img src="Images/IMG_20241105_132948.jpg" alt="Art 9"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(9)"><img src="Images/IMG_20241113_135505.jpg" alt="Art 10"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(10)"><img src="Images/IMG_20241121_085956.jpg" alt="Art 11"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(11)"><img src="Images/IMG_20241130_205217.jpg" alt="Art 12"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(12)"><img src="Images/IMG_20250208_170801.jpg" alt="Art 13"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(13)"><img src="Images/IMG_20250305_143647.jpg" alt="Art 14"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(14)"><img src="Images/IMG_20250305_143838.jpg" alt="Art 15"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(15)"><img src="Images/IMG_20250417_154918.jpg" alt="Art 16"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(16)"><img src="Images/IMG-20241030-WA0037.jpg" alt="Art 17"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(17)"><img src="Images/IMG-20241030-WA0038.jpg" alt="Art 18"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(18)"><img src="Images/IMG-20241030-WA0039.jpg" alt="Art 19"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(19)"><img src="Images/pm_1717321216974_cmp.jpg" alt="Art 20"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(20)"><img src="Images/pm_1717321241326_cmp~2.jpg" alt="Art 21"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(21)"><img src="Images/WhatsApp Image 2025-06-21 at 00.09.42_c7c71477.jpg" alt="Art 22"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(22)"><img src="Images/WhatsApp Image 2025-06-21 at 00.10.33_945f3d4c.jpg" alt="Art 23"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(23)"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.22_9e909f9c.jpg" alt="Art 24"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(24)"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.23_58dbc78a.jpg" alt="Art 25"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(25)"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.26_41ec4c71.jpg" alt="Art 26"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(26)"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.27_210aa832.jpg" alt="Art 27"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(27)"><img src="Images/WhatsApp Image 2025-06-21 at 22.11.28_7c3b4668.jpg" alt="Art 28"/><div class="art-item-overlay"><span>View</span></div></div>
+      <div class="art-item" onclick="openLightbox(28)"><img src="Images/WhatsApp Image 2025-06-21 at 22.34.39_c388e3fc.jpg" alt="Art 29"/><div class="art-item-overlay"><span>View</span></div></div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-nav lightbox-prev" onclick="shiftLightbox(-1)">‹</button>
+    <img id="lightbox-img" src="" alt=""/>
+    <button class="lightbox-nav lightbox-next" onclick="shiftLightbox(1)">›</button>
+    <div class="lightbox-counter" id="lightbox-counter"></div>
   </div>
 
-  <a href="index.html">Back To main</a>
+  <footer>
+    <p>Sail Away &nbsp;·&nbsp; Original Artwork &nbsp;·&nbsp; © 2025</p>
+  </footer>
 
   <script>
-    const modeButton = document.getElementById("modeButton");
-    modeButton.addEventListener("click", () => {
-      document.body.classList.toggle("night");
-      modeButton.textContent = document.body.classList.contains("night")
-        ? "Switch to Light Mode"
-        : "Switch to Dark Mode";
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('revealed'), i * 40);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.05 });
+    document.querySelectorAll('.art-item').forEach(el => observer.observe(el));
+
+    // Gather all image srcs
+    const images = Array.from(document.querySelectorAll('.art-item img')).map(img => img.src);
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      document.getElementById('lightbox-img').src = images[index];
+      document.getElementById('lightbox-counter').textContent = `${index + 1} / ${images.length}`;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function shiftLightbox(dir) {
+      currentIndex = (currentIndex + dir + images.length) % images.length;
+      const img = document.getElementById('lightbox-img');
+      img.style.opacity = 0;
+      setTimeout(() => {
+        img.src = images[currentIndex];
+        img.style.opacity = 1;
+        document.getElementById('lightbox-counter').textContent = `${currentIndex + 1} / ${images.length}`;
+      }, 150);
+    }
+
+    // Keyboard nav
+    document.addEventListener('keydown', e => {
+      if (!document.getElementById('lightbox').classList.contains('open')) return;
+      if (e.key === 'ArrowRight') shiftLightbox(1);
+      if (e.key === 'ArrowLeft') shiftLightbox(-1);
+      if (e.key === 'Escape') closeLightbox();
+    });
+
+    // Click outside image to close
+    document.getElementById('lightbox').addEventListener('click', e => {
+      if (e.target === document.getElementById('lightbox')) closeLightbox();
+    });
+
+    // Mobile nav
+    const toggle = document.getElementById('navToggle');
+    const nav = document.getElementById('mainNav');
+    toggle.addEventListener('click', () => nav.classList.toggle('open'));
+    document.addEventListener('click', e => {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) nav.classList.remove('open');
     });
   </script>
 </body>
