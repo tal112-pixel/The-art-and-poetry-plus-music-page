@@ -3,97 +3,537 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Stargazing | Music</title>
+  <title>Music | Sail Away</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --ink: #e8e0d5;
+      --ink-dim: rgba(232,224,213,0.5);
+      --ink-faint: rgba(232,224,213,0.08);
+      --accent: #c9a96e;
+      --accent-glow: rgba(201,169,110,0.15);
+      --bg-deep: #0a0806;
+      --bg-card: rgba(255,255,255,0.04);
+      --bg-card-hover: rgba(255,255,255,0.07);
+      --border: rgba(201,169,110,0.2);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
     body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
-      color: white;
-      text-align: center;
-      padding: 50px 20px;
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--bg-deep);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 10px;
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.6;
     }
 
-    p {
-      font-size: 1.2em;
-      margin-bottom: 40px;
-      color: #ccc;
+    /* ── CANVAS ── */
+    #bg-canvas {
+      position: fixed; inset: 0;
+      z-index: 0; pointer-events: none;
     }
 
-    audio {
-      width: 90%;
-      max-width: 500px;
-      margin-bottom: 40px;
-      outline: none;
+    /* ── HEADER ── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 3rem;
+      background: rgba(10,8,6,0.88);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
     }
 
-    a {
-      display: inline-block;
-      padding: 10px 20px;
-      background-color: #ffffff20;
-      color: white;
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem; font-weight: 300;
+      color: var(--accent); letter-spacing: 0.08em;
       text-decoration: none;
-      border: 1px solid white;
-      border-radius: 8px;
-      transition: background-color 0.3s ease;
     }
 
-    a:hover {
-      background-color: #ffffff40;
+    nav { display: flex; gap: 2rem; align-items: center; }
+
+    nav a {
+      text-decoration: none; color: var(--ink-dim);
+      font-size: 0.82rem; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      transition: color 0.3s; position: relative;
+    }
+    nav a::after {
+      content: ''; position: absolute;
+      bottom: -3px; left: 0; width: 0; height: 1px;
+      background: var(--accent); transition: width 0.3s;
+    }
+    nav a:hover { color: var(--accent); }
+    nav a:hover::after { width: 100%; }
+
+    .nav-toggle {
+      display: none; flex-direction: column;
+      gap: 5px; cursor: pointer; padding: 4px;
+    }
+    .nav-toggle span {
+      display: block; width: 24px; height: 1.5px;
+      background: var(--ink); transition: all 0.3s;
     }
 
-    @media (max-width: 600px) {
-      h1 {
-        font-size: 2em;
-      }
+    /* ── HERO ── */
+    .hero {
+      position: relative; z-index: 2;
+      text-align: center;
+      padding: 7rem 2rem 4rem;
+    }
 
-      audio {
-        width: 100%;
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(201,169,110,0.07) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 1.2rem;
+      opacity: 0; animation: fadeUp 0.9s ease 0.2s forwards;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 300; line-height: 1.05;
+      color: var(--ink); margin-bottom: 1rem;
+      opacity: 0; animation: fadeUp 1s ease 0.4s forwards;
+    }
+
+    .hero h1 em { font-style: italic; color: var(--accent); }
+
+    .hero-sub {
+      font-size: 0.88rem; letter-spacing: 0.15em;
+      color: var(--ink-dim);
+      opacity: 0; animation: fadeUp 1s ease 0.6s forwards;
+    }
+
+    .hero-divider {
+      width: 50px; height: 1px;
+      background: var(--accent); margin: 1.8rem auto;
+      opacity: 0; animation: expand 1s ease 0.8s forwards;
+    }
+
+    /* ── TRACK LIST ── */
+    .tracks-section {
+      position: relative; z-index: 2;
+      max-width: 700px; margin: 0 auto;
+      padding: 1rem 2rem 6rem;
+    }
+
+    .track-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2rem 2.2rem;
+      margin-bottom: 1.5rem;
+      transition: background 0.4s, transform 0.3s, box-shadow 0.4s;
+      position: relative;
+      overflow: hidden;
+      opacity: 0; transform: translateY(20px);
+    }
+
+    .track-card.revealed {
+      opacity: 1; transform: translateY(0);
+      transition: opacity 0.6s ease, transform 0.6s ease, background 0.4s, box-shadow 0.4s;
+    }
+
+    .track-card::before {
+      content: '';
+      position: absolute; left: 0; top: 0;
+      width: 3px; height: 100%;
+      background: var(--accent); opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .track-card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    }
+
+    .track-card:hover::before { opacity: 1; }
+
+    .track-number {
+      font-size: 0.65rem; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+
+    .track-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem; font-weight: 400;
+      color: var(--ink); margin-bottom: 1.4rem;
+      line-height: 1.2;
+    }
+
+    /* ── CUSTOM AUDIO PLAYER ── */
+    .player {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .player-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .play-btn {
+      width: 44px; height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--accent);
+      background: var(--accent-glow);
+      color: var(--accent);
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+
+    .play-btn:hover {
+      background: var(--accent);
+      color: var(--bg-deep);
+    }
+
+    .player-time {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-dim);
+      white-space: nowrap;
+      min-width: 80px;
+    }
+
+    .progress-wrap {
+      flex: 1;
+      height: 3px;
+      background: var(--ink-faint);
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+      overflow: visible;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.1s linear;
+      position: relative;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      right: -4px; top: 50%;
+      transform: translateY(-50%);
+      width: 10px; height: 10px;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .progress-wrap:hover .progress-fill::after { opacity: 1; }
+
+    /* hide native audio */
+    audio { display: none; }
+
+    /* ── WAVEFORM VIZ ── */
+    .waveform {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      height: 28px;
+      margin-left: auto;
+    }
+
+    .waveform span {
+      display: block;
+      width: 3px;
+      border-radius: 2px;
+      background: var(--accent);
+      opacity: 0.3;
+      transition: height 0.1s;
+    }
+
+    .waveform.playing span {
+      opacity: 0.7;
+      animation: wave 0.8s ease infinite;
+    }
+
+    .waveform span:nth-child(1) { height: 8px; animation-delay: 0s; }
+    .waveform span:nth-child(2) { height: 16px; animation-delay: 0.1s; }
+    .waveform span:nth-child(3) { height: 22px; animation-delay: 0.2s; }
+    .waveform span:nth-child(4) { height: 14px; animation-delay: 0.15s; }
+    .waveform span:nth-child(5) { height: 20px; animation-delay: 0.05s; }
+    .waveform span:nth-child(6) { height: 10px; animation-delay: 0.25s; }
+    .waveform span:nth-child(7) { height: 18px; animation-delay: 0.12s; }
+
+    @keyframes wave {
+      0%, 100% { transform: scaleY(0.5); }
+      50% { transform: scaleY(1.2); }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative; z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--ink-dim);
+      font-size: 0.75rem; letter-spacing: 0.15em;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 700px) {
+      header { padding: 1rem 1.4rem; }
+      .nav-toggle { display: flex; }
+      nav {
+        position: fixed; top: 0; right: -100%;
+        height: 100vh; width: 70vw; max-width: 280px;
+        background: rgba(10,8,6,0.97);
+        backdrop-filter: blur(20px);
+        flex-direction: column; justify-content: center;
+        gap: 2.5rem; border-left: 1px solid var(--border);
+        transition: right 0.4s cubic-bezier(0.4,0,0.2,1);
+        z-index: 200;
       }
+      nav.open { right: 0; }
+      nav a { font-size: 1rem; }
+      .tracks-section { padding: 1rem 1.2rem 4rem; }
+      .track-card { padding: 1.5rem 1.4rem; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes expand {
+      from { opacity: 0; width: 0; }
+      to { opacity: 1; width: 50px; }
     }
   </style>
 </head>
 <body>
-  <h1>Stargazing</h1>
- 
-  <audio controls>
-    <source src="music/Free Sad Piano Type Beat - _Damage_ _ Emotional Piano Instrumental 2022-yt.savetube.me.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
 
-  <h1>Miracles</h1>
- 
-  <audio controls>
-    <source src="music/FREE Sad Type Beat - _Old Memories_ _ Emotional Rap Piano Instrumental-yt.savetube.me.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+  <canvas id="bg-canvas"></canvas>
 
-   <h1>Remember the times</h1>
+  <header>
+    <a class="logo" href="index.html">Sail Away</a>
+    <div class="nav-toggle" id="navToggle">
+      <span></span><span></span><span></span>
+    </div>
+    <nav id="mainNav">
+      <a href="music.html">🎵 Music</a>
+      <a href="Gallery.html">Gallery</a>
+      <a href="index.html#poems">Poems</a>
+    </nav>
+  </header>
 
-<audio controls>
-    <source src="music/Sad Type Beat - _Scars_ Emotional Instrumental 2021-yt.savetube.me.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
-  </audio>
+  <section class="hero">
+    <p class="hero-eyebrow">Sounds & Feelings</p>
+    <h1>Listen &amp; <em>drift</em></h1>
+    <div class="hero-divider"></div>
+    <p class="hero-sub">Original compositions &nbsp;·&nbsp; Close your eyes</p>
+  </section>
 
+  <section class="tracks-section">
 
+    <!-- Track 1 -->
+    <div class="track-card">
+      <p class="track-number">Track 01</p>
+      <h2 class="track-title">Stargazing</h2>
+      <audio id="audio-0" src="music/Free Sad Piano Type Beat - _Damage_ _ Emotional Piano Instrumental 2022-yt.savetube.me.mp3"></audio>
+      <div class="player">
+        <div class="player-controls">
+          <button class="play-btn" onclick="togglePlay(0)" id="btn-0">▶</button>
+          <div class="progress-wrap" onclick="seek(event, 0)" id="prog-0">
+            <div class="progress-fill" id="fill-0"></div>
+          </div>
+          <span class="player-time" id="time-0">0:00 / 0:00</span>
+          <div class="waveform" id="wave-0">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <!-- Track 2 -->
+    <div class="track-card">
+      <p class="track-number">Track 02</p>
+      <h2 class="track-title">Miracles</h2>
+      <audio id="audio-1" src="music/FREE Sad Type Beat - _Old Memories_ _ Emotional Rap Piano Instrumental-yt.savetube.me.mp3"></audio>
+      <div class="player">
+        <div class="player-controls">
+          <button class="play-btn" onclick="togglePlay(1)" id="btn-1">▶</button>
+          <div class="progress-wrap" onclick="seek(event, 1)" id="prog-1">
+            <div class="progress-fill" id="fill-1"></div>
+          </div>
+          <span class="player-time" id="time-1">0:00 / 0:00</span>
+          <div class="waveform" id="wave-1">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <!-- Track 3 -->
+    <div class="track-card">
+      <p class="track-number">Track 03</p>
+      <h2 class="track-title">Remember the Times</h2>
+      <audio id="audio-2" src="music/Sad Type Beat - _Scars_ Emotional Instrumental 2021-yt.savetube.me.mp3"></audio>
+      <div class="player">
+        <div class="player-controls">
+          <button class="play-btn" onclick="togglePlay(2)" id="btn-2">▶</button>
+          <div class="progress-wrap" onclick="seek(event, 2)" id="prog-2">
+            <div class="progress-fill" id="fill-2"></div>
+          </div>
+          <span class="player-time" id="time-2">0:00 / 0:00</span>
+          <div class="waveform" id="wave-2">
+            <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
 
+  </section>
 
+  <footer>
+    <p>Sail Away &nbsp;·&nbsp; Original Music &nbsp;·&nbsp; © 2025</p>
+  </footer>
 
+  <script>
+    /* ── PARTICLES ── */
+    const canvas = document.getElementById('bg-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    let W, H;
 
+    function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+    function createParticles() {
+      particles = [];
+      const count = Math.floor((W * H) / 22000);
+      for (let i = 0; i < count; i++) {
+        particles.push({ x: Math.random()*W, y: Math.random()*H, r: Math.random()*1.4+0.3, alpha: Math.random()*0.4+0.1, speed: Math.random()*0.25+0.05, drift: (Math.random()-0.5)*0.3 });
+      }
+    }
+    function drawParticles() {
+      ctx.clearRect(0,0,W,H);
+      particles.forEach(p => {
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle = `rgba(201,169,110,${p.alpha})`; ctx.fill();
+        p.y -= p.speed; p.x += p.drift;
+        if (p.y < -5) { p.y = H+5; p.x = Math.random()*W; }
+        if (p.x < -5 || p.x > W+5) { p.x = Math.random()*W; p.y = H+5; }
+      });
+      requestAnimationFrame(drawParticles);
+    }
+    resize(); createParticles(); drawParticles();
+    window.addEventListener('resize', () => { resize(); createParticles(); });
 
+    /* ── AUDIO PLAYER ── */
+    const TOTAL = 3;
+    let currentPlaying = -1;
 
+    function fmt(s) {
+      if (isNaN(s)) return '0:00';
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60).toString().padStart(2, '0');
+      return `${m}:${sec}`;
+    }
 
+    function togglePlay(i) {
+      const audio = document.getElementById(`audio-${i}`);
+      const btn = document.getElementById(`btn-${i}`);
+      const wave = document.getElementById(`wave-${i}`);
 
+      if (currentPlaying !== -1 && currentPlaying !== i) {
+        const prev = document.getElementById(`audio-${currentPlaying}`);
+        prev.pause();
+        document.getElementById(`btn-${currentPlaying}`).textContent = '▶';
+        document.getElementById(`wave-${currentPlaying}`).classList.remove('playing');
+      }
 
+      if (audio.paused) {
+        audio.play();
+        btn.textContent = '⏸';
+        wave.classList.add('playing');
+        currentPlaying = i;
+      } else {
+        audio.pause();
+        btn.textContent = '▶';
+        wave.classList.remove('playing');
+        currentPlaying = -1;
+      }
+    }
 
-  <br>
-  <a href="index.html">🏠 Back to Home</a>
+    function seek(e, i) {
+      const audio = document.getElementById(`audio-${i}`);
+      const bar = document.getElementById(`prog-${i}`);
+      const rect = bar.getBoundingClientRect();
+      const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+      audio.currentTime = pct * audio.duration;
+    }
+
+    // Bind timeupdate for each audio
+    for (let i = 0; i < TOTAL; i++) {
+      const audio = document.getElementById(`audio-${i}`);
+      const fill = document.getElementById(`fill-${i}`);
+      const timeEl = document.getElementById(`time-${i}`);
+      const btn = document.getElementById(`btn-${i}`);
+      const wave = document.getElementById(`wave-${i}`);
+
+      audio.addEventListener('timeupdate', () => {
+        const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+        fill.style.width = pct + '%';
+        timeEl.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
+      });
+
+      audio.addEventListener('ended', () => {
+        btn.textContent = '▶';
+        wave.classList.remove('playing');
+        fill.style.width = '0%';
+        currentPlaying = -1;
+      });
+    }
+
+    /* ── SCROLL REVEAL ── */
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, idx) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => entry.target.classList.add('revealed'), idx * 100);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.track-card').forEach(c => observer.observe(c));
+
+    /* ── MOBILE NAV ── */
+    const toggle = document.getElementById('navToggle');
+    const nav = document.getElementById('mainNav');
+    toggle.addEventListener('click', () => nav.classList.toggle('open'));
+    document.addEventListener('click', e => {
+      if (!nav.contains(e.target) && !toggle.contains(e.target)) nav.classList.remove('open');
+    });
+  </script>
 </body>
 </html>
